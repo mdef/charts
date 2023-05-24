@@ -162,16 +162,17 @@ spec:
         accessModes:
           {{- range .accessModes }}
           - {{ . | quote }}
-          {{- end }}
+        {{- end }}
+        {{- if .storageClass -}}
+        {{- if (eq "-" .storageClass) -}}
+        {{- printf "storageClassName: \"\"" -}}
+        {{- else }}
+        {{- printf "storageClassName: %s" .storageClass -}}
+        {{- end }}
+        {{- end }}          
         resources:
           requests:
             storage: {{ .size | quote }}
-            {{- if .storageClass -}}
-            {{- if (eq "-" .storageClass) -}}
-            {{- printf "storageClassName: \"\"" -}}
-            {{- else }}
-            {{- printf "storageClassName: %s" .storageClass -}}
-            {{- end }}
-            {{- end }}
+
   {{- end }}
 {{- end }}
